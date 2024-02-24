@@ -18,6 +18,7 @@ use App\Filament\Resources\CommodityPackageResource\RelationManagers;
 class CommodityPackageResource extends Resource
 {
     protected static ?string $model = CommodityPackage::class;
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
