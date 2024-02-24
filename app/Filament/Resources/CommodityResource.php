@@ -8,6 +8,8 @@ use Filament\Forms\Form;
 use App\Models\Commodity;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\SelectFilter;
@@ -26,9 +28,13 @@ class CommodityResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                ->maxLength(100)
-                ->label('Name'),
+                Select::make('proficiency_id')->relationship(
+                    name:'proficiency',
+                    titleAttribute:'years',
+                    modifyQueryUsing: fn (Builder $query) => $query->where('years',date('Y'))
+                )->selectablePlaceholder(false)->required(),
+                TextInput::make('name') ->maxLength(100) ->label('Name'),
+                Textarea::make('description')->label('Description'),
             ]);
     }
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('proficiency_id');
             $table->string('name',25);
             $table->integer('parent')->default(0);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

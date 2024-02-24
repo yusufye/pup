@@ -8,6 +8,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Proficiency;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,7 +35,8 @@ class ProficiencyResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('years')->label('Year'),
+                TextColumn::make('show_report')->label('Show Report'),
             ])
             ->filters([
                 //

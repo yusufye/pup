@@ -6,6 +6,9 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,8 +22,20 @@ class CommodityRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('name') ->required() ->maxLength(255),
-                TextInput::make('description') ->required() ->maxLength(255),
+                Select::make('proficiency_id')->options(function ($record) {
+                    if (empty($record)) {
+                        return DB::table('proficiencies')
+                        ->where('years',date('Y'))
+                        ->pluck('years','id');                       
+                    }
+                    $recordCommodity = $record->getAttributes();
+                    $proficiency = $recordCommodity['proficiency_id'];
+                    return DB::table('proficiencies')
+                        ->where('id',$proficiency)
+                        ->pluck('years','id');
+                })->selectablePlaceholder(false)->required(),
+                TextInput::make('name') ->maxLength(100) ->label('Name'),
+                Textarea::make('description')->label('Description'),
             ]);
     }
 
