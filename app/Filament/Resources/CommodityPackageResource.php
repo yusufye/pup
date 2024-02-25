@@ -27,6 +27,7 @@ class CommodityPackageResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name') ->maxLength(100) ->label('Name'),
+                TextInput::make('description') ->maxLength(100) ->label('Description'),
             ]);
     }
 

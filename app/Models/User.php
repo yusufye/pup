@@ -46,6 +46,11 @@ class User extends Authenticatable
 
     public function proficiency(): belongsToMany
     {
-        return $this->belongsToMany(Proficiency::class, 'proficiency_clients');
+        return $this->belongsToMany(Proficiency::class, 'proficiency_user');
+    }
+
+    public function client_id(): HasMany
+    {
+        return $this->hasMany(Client::class);
     }
 }

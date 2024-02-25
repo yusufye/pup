@@ -21,6 +21,6 @@ class Proficiency extends Model
 
     public function user(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'proficiency_clients');
+        return $this->belongsToMany(User::class, 'proficiency_user');
     }
 }

@@ -25,9 +25,10 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
             UserSeeder::class,
             CommoditySeeder::class,
-            // ProficiencyClientSeeder::class,
-            // ProficiencyClientCommoditySeeder::class,
-            // ProficiencyClientPackageSeeder::class
+            ProficiencyUserSeeder::class,
+            ProficiencyUserCommoditySeeder::class,
+            ProficiencyUserQuestionnaireSeeder::class,
+            ProficiencyUserPackageSeeder::class
 
         ]);
     }

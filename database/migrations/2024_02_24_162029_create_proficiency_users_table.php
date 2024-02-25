@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commodity_packages', function (Blueprint $table) {
+        Schema::create('proficiency_users', function (Blueprint $table) {
             $table->id();
-            $table->string('name',25);
-            $table->unsignedBigInteger('commodity_id');
-            $table->decimal('price',18,2);
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('proficiency_id');
+            $table->unsignedBigInteger('client_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('client_sertificate',200)->nullable();
+            $table->string('client_report',200)->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commodity_packages');
+        Schema::dropIfExists('proficiency_users');
     }
 };

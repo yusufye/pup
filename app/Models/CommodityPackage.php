@@ -16,7 +16,7 @@ class CommodityPackage extends Model
         'description',
     ];
 
-    public function commodity(): BelongsTo{
+    public function commodity(){
         return $this->belongsTo(Commodity::class);
     }
 }
