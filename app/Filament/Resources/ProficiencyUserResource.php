@@ -90,7 +90,7 @@ class ProficiencyUserResource extends Resource
                         ->options(Client::pluck('name', 'id')->toArray())
                         ->default(function(Get $get) {
                             if (!auth()->user()->hasRole('super_admin')) {
-                                $client = User::where('id',$get('user_id'))->pluck('client_id')->first();
+                                $client = Client::where('user_id',$get('user_id'))->pluck('id')->first();
                                 return $client;
                             }
                         })

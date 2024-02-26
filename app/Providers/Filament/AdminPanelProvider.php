@@ -62,13 +62,15 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make('My Company')
                 ->url(function () {
                     $userId = auth()->id();
-                    $clientId = DB::table('users') ->where('id', $userId) ->pluck('client_id') ->first();
+                    $clientId = DB::table('clients') ->where('user_id', $userId) ->pluck('id') ->first();
 
                         $url = "../admin/clients/{$clientId}/edit";
                         $cleanedUrl = Str::of($url)->replace('..', '');
                         return $cleanedUrl;
                 })
                 ->icon('heroicon-o-user')
+                ->visible(fn(): bool => auth()->user()->hasRole('Client')),
+
                 
             ])
             ->plugins([

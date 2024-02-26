@@ -65,7 +65,7 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                                 ->required()
                                 ->live(onBlur:true)
                                 ->afterStateUpdated(function(Get $get, Set $set){                 
-                                    $package =  CommodityPackage::where('id',$get('package_id'))->first();  
+                                    $package =  CommodityPackage::where('id',$get('package_id'))->first();
                                     $package_price = number_format($package->price, 0, '.', '.');                        
                                     $set('package_price',  $package_price);
                                 })

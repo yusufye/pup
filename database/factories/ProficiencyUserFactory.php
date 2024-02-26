@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Client;
 use App\Models\Proficiency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,13 +19,13 @@ class ProficiencyUserFactory extends Factory
      */
     public function definition(): array
     {
-        $user=User::inRandomOrder()->first();
+        $client=Client::inRandomOrder()->first();
         return [
-            'user_id' => $user->id,
+            'user_id' => $client->user_id,
             'proficiency_id' => function () {
                 return Proficiency::inRandomOrder()->first()->id;
             },
-            'client_id' =>$user->client_id
+            'client_id' =>$client->id
         ];
     }
 }

@@ -18,6 +18,7 @@ class ClientFactory extends Factory
     {
         return [
             'name' => fake()->company(),
+            'laboratory' => fake()->word(2, true),
             'address' => fake()->address()
         ];
     }

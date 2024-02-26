@@ -26,6 +26,7 @@ class ClientResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name') ->maxLength(100) ->label('Name'),
+                Textarea::make('laboratory') ->maxLength(100) ->label('Laboratory'),
                 Textarea::make('address') ->maxLength(100) ->label('Address'),
             ]);
     }
@@ -63,5 +64,10 @@ class ClientResource extends Resource
             'create' => Pages\CreateClient::route('/create'),
             'edit' => Pages\EditClient::route('/{record}/edit'),
         ];
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole('super_admin');
     }
 }
