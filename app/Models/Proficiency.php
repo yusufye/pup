@@ -19,8 +19,13 @@ class Proficiency extends Model
         return $this->hasMany(Commodity::class);
     }
 
-    public function user(): BelongsToMany
+    public function questionnaire()
     {
-        return $this->belongsToMany(User::class, 'proficiency_user');
+        return $this->hasMany(ProficiencyQuestionnaire::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class, 'proficiency_users');
     }
 }

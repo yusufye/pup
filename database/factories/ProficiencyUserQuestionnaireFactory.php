@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Proficiency;
 use App\Models\ProficiencyUser;
+use App\Models\ProficiencyQuestionnaire;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,12 +19,10 @@ class ProficiencyUserQuestionnaireFactory extends Factory
      */
     public function definition(): array
     {
-        $proficiency_user_id=ProficiencyUser::get()->pluck('proficiency_id')->random();
-        
         return [
-            'proficiency_user_id' => $proficiency_user_id,
-            'item' => fake()->words(1, true),
             'value' => fake()->randomDigitNot(2)
         ];
+        
+        
     }
 }
