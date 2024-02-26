@@ -32,4 +32,9 @@ class Commodity extends Model
     {
         return $this->belongsTo(Proficiency::class);
     }
+
+    public function proficiencyUserCommodity(): HasMany
+    {
+        return $this->hasMany(ProficiencyUserCommodity::class,'commodity_id','id');
+    }
 }

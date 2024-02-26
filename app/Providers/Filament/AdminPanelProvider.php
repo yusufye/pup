@@ -70,6 +70,9 @@ class AdminPanelProvider extends PanelProvider
                 })
                 ->icon('heroicon-o-user')
                 
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ]);
     }
 }
