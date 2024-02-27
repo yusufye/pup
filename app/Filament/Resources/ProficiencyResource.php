@@ -22,6 +22,7 @@ class ProficiencyResource extends Resource
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationGroup = 'Master Profisiensi';
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $pluralModelLabel = 'Tahun';
     
     public static function form(Form $form): Form
     {
