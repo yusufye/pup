@@ -35,6 +35,6 @@ class ProficiencyUserCommodity extends Model
     
     public function ProficiencyUser(): BelongsTo
     {
-        return $this->belongsTo(ProficiencyUser::class);
+        return $this->belongsTo(ProficiencyUser::class,'proficiency_user_id','id');
     }
 }

@@ -26,11 +26,15 @@ class ProficiencyUser extends Model
 
     public function ProficiencyUserQuestionnaire(): HasMany
     {
-        return $this->hasMany(ProficiencyUserQuestionnaire::class);
+        return $this->hasMany(ProficiencyUserQuestionnaire::class,'proficiency_user_id','id');
     }
 
     public function Proficiency(): BelongsTo
     {
         return $this->belongsTo(Proficiency::class,'proficiency_id','id');
+    }
+    public function Clients(): BelongsTo
+    {
+        return $this->belongsTo(Client::class,'client_id','id');
     }
 }

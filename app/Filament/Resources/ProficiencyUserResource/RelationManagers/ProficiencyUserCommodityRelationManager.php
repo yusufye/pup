@@ -4,9 +4,13 @@ namespace App\Filament\Resources\ProficiencyUserResource\RelationManagers;
 
 use App\Models\Commodity;
 use App\Models\CommodityPackage;
+use App\Models\ProficiencyUser;
 use App\Models\ProficiencyUserCommodity;
 use App\Models\ProficiencyUserPackage;
+use Closure;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -21,6 +25,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rules\Unique;
 
 class ProficiencyUserCommodityRelationManager extends RelationManager
 {
@@ -38,6 +44,7 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
             }
         }
 
+
         return $form
             ->schema([ 
                 Section::make()
@@ -52,8 +59,21 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                             $set('price',  '');                      
                             
                         })
+                        ->visibleOn('create')
                         ->searchable(),
-                        ])->visibleOn('create'),
+                        FileUpload::make('client_document')
+                        ->maxSize(2048)
+                        ->hiddenOn('create')
+                        ->visible(auth()->user()->hasRole('client'))
+                        ->label('Document')
+                        ->directory('proficiency_user_commodity/client_document/')
+                        ->label('Client Document')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'xl' => 1,
+                        ]),
+                        ]),
+                        Hidden::make('commodity_id')->visibleOn('edit'),
                         Section::make()
                         ->visibleOn('edit')
                         ->schema([                            
@@ -61,15 +81,62 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                             ->relationship('ProficiencyUserPackage')
                             ->schema([
                                 Select::make('package_id')
-                                ->options($options)
+                                ->options($options)                                
+                                // ->disableOptionWhen(function($value) {
+                                //     $existingPackageIds = ProficiencyUserPackage::where('proficiency_user_commodity_id', $this->ownerRecord->id)
+                                //         ->pluck('package_id')
+                                //         ->toArray();
+                                //     return in_array($value, $existingPackageIds);
+                                // })
+                                
                                 ->required()
                                 ->live(onBlur:true)
-                                ->afterStateUpdated(function(Get $get, Set $set){                 
+                                ->afterStateUpdated(function(Get $get, Set $set,$record){ 
                                     $package =  CommodityPackage::where('id',$get('package_id'))->first();
                                     $package_price = number_format($package->price, 0, '.', '.');                        
                                     $set('package_price',  $package_price);
                                 })
-                                ->unique(column: 'package_id',ignoreRecord: true)
+                                // ->unique(ProficiencyUserPackage::class, 'package_id', ignoreRecord: true, 
+                                // modifyRuleUsing: function (Unique $rule, string $context, ?Model $record,Get $get) {
+                                //     $array_id = [];
+                                //     $array_id = array_merge(
+                                //         ProficiencyUserPackage::where('proficiency_user_commodity_id', $record->proficiency_user_commodity_id)
+                                //             ->pluck('package_id')->toArray(),
+                                //         [$record->package_id]
+                                //     );
+                                       
+                                //     if ($this->ownerRecord !== null) {
+                                //         if (isset($record->package_id) && isset($record->proficiency_user_commodity_id)) {
+                                //             return $rule
+                                //                 ->where('package_id', $record->package_id)
+                                //                 ->where('proficiency_user_commodity_id', $record->proficiency_user_commodity_id);
+                                //         }
+                                //     }
+                                //     return $rule;
+                                // })
+                                
+                                
+                                // ->rules([
+                                //     function () {
+                                //     return function ($attribute, $value, Closure $fail) {
+                                //         dd($value);
+
+                                //         $existingPackageIds = ProficiencyUserPackage::where('proficiency_user_commodity_id', $this->ownerRecord->id)
+                                //             ->pluck('package_id')
+                                //             ->toArray();
+
+                                //                 if (in_array($value, $existingPackageIds)) {
+                                //                     $fail('Package ID harus unik.');
+                                                
+
+                                //             }
+                                //     };
+                                //     },
+                                // ])
+                                
+                                
+                                // ->unique(column: 'package_id',ignoreRecord: false)
+                                // ->unique('package_id', ignoreRecord:true)
                                 ->label('Package')
                                 ->columnSpan([
                                     'sm' => 6,
@@ -77,45 +144,12 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                                 ])
                                 ->visibleOn('edit')
                                 ->searchable(),
-                                Select::make('package_id')
-                                    ->options(function(Get $get,Set $set, $record) {   
-                                        dd($get('commodity_id'));
-                                        if(!$record){
-
-                                           return CommodityPackage::pluck('name', 'id')->toArray();        
-                                        }else{
-                                            $paket = ProficiencyUserPackage::where('proficiency_user_packages.id', $record->id)
-                                            ->join('proficiency_user_commodities', 'proficiency_user_packages.proficiency_user_commodity_id', 'proficiency_user_commodities.id')
-                                            ->get();       
-                                              $commodityIds = $paket->pluck('commodity_id')->toArray(); 
-
-                                         return CommodityPackage::whereIn('commodity_id', $commodityIds)->pluck('name', 'id')->toArray();                                
-                                            
-                                        }
-                                    
-                                    
-                                    })
-                                ->required()
-                                ->unique(column: 'package_id',ignoreRecord: true)
-                                ->live(onBlur:true)
-                                ->afterStateUpdated(function(Get $get, Set $set){                 
-                                    $package =  CommodityPackage::where('id',$get('package_id'))->first();  
-                                    $package_price = number_format($package->price, 0, '.', '.');                        
-                                    $set('package_price',  $package_price);
-                                })
-                                ->label('Package')
-                                ->columnSpan([
-                                    'sm' => 6,
-                                    'xl' => 6,
-                                ])
-                                ->visibleOn('create')
-                                ->searchable(),
                                 TextInput::make('package_price')
                                 ->placeholder(function(Get $get, Set $set){ 
                                     if( $get('package_id')){
                                         $price = CommodityPackage::where('id', $get('package_id'))->first();  
                                         $package_price = number_format($price->price, 0, '.', '.');           
-                                        $set('package_price',$package_price);  
+                                        $set('package_price',$package_price); 
 
                                     }
                                 })
@@ -125,8 +159,18 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                                     'sm' => 6,
                                     'xl' => 6,
                                 ]),
+                                // TextInput::make('proficiency_user_id')
+                                // ->default($this->ownerRecord->id)
+                                // ->columnSpan([
+                                //     'sm' => 6,
+                                //     'xl' => 6,
+                                // ]),
                             ])->columns(12)
+
+
+                            
                         ]),
+                        
             ]);
     }
 
@@ -136,6 +180,8 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
             // ->recordTitleAttribute('proficiency_user_id')
             ->columns([
                 TextColumn::make('Commodity.name'),
+                TextColumn::make('Commodity.client_document')
+                ->label('Document'),
 
             ])
             ->filters([
