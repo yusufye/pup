@@ -20,15 +20,15 @@ class ProficiencyResource extends Resource
 {
     protected static ?string $model = Proficiency::class;
     protected static ?int $navigationSort = 1;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Master Profisiensi';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('years')->default(date('Y'))->label('Year')->readonly(),
-                DatePicker::make('show_report') ->format('d-m-Y')
+                TextInput::make('years')->default(date('Y'))->label('Tahun')->readOnly(),
+                DatePicker::make('Tanggal Report') ->format('d-m-Y')
             ]);
     }
 
@@ -36,8 +36,8 @@ class ProficiencyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('years')->label('Year'),
-                TextColumn::make('show_report')->label('Show Report'),
+                TextColumn::make('years')->label('Tahun'),
+                TextColumn::make('show_report')->dateTime('d M Y H:i:s')->label('Tanggal Report'),
             ])
             ->filters([
                 //
@@ -47,7 +47,7 @@ class ProficiencyResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -55,7 +55,9 @@ class ProficiencyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\CommodityRelationManager::class,
+            // RelationManagers\CommodityRelationManager::class,
+            RelationManagers\ProficiencyQuestionnaireRelationManager::class,
+            
         ];
     }
 

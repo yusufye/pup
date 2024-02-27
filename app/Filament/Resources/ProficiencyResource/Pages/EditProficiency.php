@@ -9,11 +9,12 @@ use Filament\Resources\Pages\EditRecord;
 class EditProficiency extends EditRecord
 {
     protected static string $resource = ProficiencyResource::class;
-
+    protected static ?string $pluralModelLabel = 'Tahun';
+    
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            // Actions\DeleteAction::make(),
         ];
     }
 }

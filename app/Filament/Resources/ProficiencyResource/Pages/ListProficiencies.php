@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\ProficiencyResource\Pages;
 
-use App\Filament\Resources\ProficiencyResource;
 use Filament\Actions;
+use App\Models\Proficiency;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ProficiencyResource;
 
 class ListProficiencies extends ListRecords
 {
@@ -12,8 +13,12 @@ class ListProficiencies extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $check_tahun=Proficiency::where('years',date('Y'))->get();
+
         return [
-            Actions\CreateAction::make(),
+            // ($check_tahun->isEmpty())?Actions\CreateAction::make()->label('Tambah Tahun'):'',
+            Actions\CreateAction::make()->label('Tambah')->visible($check_tahun->isEmpty()),
+        
         ];
     }
 }

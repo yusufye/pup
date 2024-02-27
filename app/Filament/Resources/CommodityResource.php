@@ -24,6 +24,8 @@ class CommodityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Master Profisiensi';
+
 
     public static function form(Form $form): Form
     {
@@ -33,9 +35,9 @@ class CommodityResource extends Resource
                     name:'proficiency',
                     titleAttribute:'years',
                     modifyQueryUsing: fn (Builder $query) => $query->where('years',date('Y'))
-                )->selectablePlaceholder(false)->required(),
-                TextInput::make('name') ->maxLength(100) ->label('Name'),
-                Textarea::make('description')->label('Description'),
+                )->selectablePlaceholder(false)->required()->label('Tahun'),
+                TextInput::make('name') ->maxLength(100) ->label('Nama'),
+                Textarea::make('description')->label('Catatan'),
             ]);
     }
 
@@ -43,8 +45,8 @@ class CommodityResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name') ->searchable() ->label('Name'),
-                TextColumn::make('description') ->searchable() ->label('Description'),
+                TextColumn::make('name') ->searchable() ->label('Nama'),
+                TextColumn::make('description') ->searchable() ->label('Catatan'),
             ])
             ->filters([
                 SelectFilter::make('proficiencies')->relationship('proficiency', 'years')

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\ProficiencyQuestionnaire;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Proficiency extends Model
 {
@@ -15,13 +16,13 @@ class Proficiency extends Model
         'years',
         'show_report'
     ];
-
+    
     public function commodity()
     {
         return $this->hasMany(Commodity::class);
     }
 
-    public function questionnaire()
+    public function ProficiencyQuestionnaire()
     {
         return $this->hasMany(ProficiencyQuestionnaire::class);
     }
