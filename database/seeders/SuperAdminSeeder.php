@@ -19,5 +19,6 @@ class SuperAdminSeeder extends Seeder
             'password' => bcrypt('test1234'),
             'email_verified_at' => date('Y-m-d h:i:s'),
         ]);
+        $superAdmin->assignRole('super_admin');
     }
 }

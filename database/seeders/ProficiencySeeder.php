@@ -14,8 +14,8 @@ class ProficiencySeeder extends Seeder
     public function run(): void
     {
         $data = array(
-            array('years'=>'2023', 'show_report'=> '2023-12-01 10:01:02'),
-            array('years'=>'2024', 'show_report'=> '2024-12-01 09:30:45')
+            array('years'=>'2022', 'show_report'=> '2023-12-01 10:01:02'),
+            array('years'=>'2023', 'show_report'=> '2024-12-01 09:30:45')
             //...
         );
         

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Events\UserCreated;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -55,6 +56,13 @@ class User extends Authenticatable
     public function client(): HasOne
     {
         return $this->hasOne(Client::class);
+    }
+
+    public static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->assignRole('Client');
+        });
     }
 
     

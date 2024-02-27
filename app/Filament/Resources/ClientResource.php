@@ -3,11 +3,13 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use App\Models\User;
 use Filament\Tables;
 use App\Models\Client;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -29,9 +31,17 @@ class ClientResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name') ->maxLength(100) ->label('Name'),
-                Textarea::make('laboratory') ->maxLength(100) ->label('Laboratory'),
-                Textarea::make('address') ->maxLength(100) ->label('Address'),
+                Select::make('user_id')
+                ->options(User::where('id',auth()->id())->pluck('name', 'id')->toArray())
+                ->default(function() {
+                    return auth()->id();
+                })
+                ->disablePlaceholderSelection()
+                ->required()
+                ->label('User'),
+                TextInput::make('name') ->maxLength(100)->required()->label('Perusahaan'),
+                TextInput::make('laboratory')->required()->maxLength(100) ->label('Laboraturium'),
+                Textarea::make('address') ->maxLength(100) ->label('Alamat'),
             ]);
     }
 

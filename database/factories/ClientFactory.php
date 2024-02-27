@@ -16,9 +16,11 @@ class ClientFactory extends Factory
      */
     public function definition(): array
     {
+        $company=ucfirst(fake()->company());
         return [
-            'name' => fake()->company(),
-            'laboratory' => fake()->word(2, true),
+            'name' => 'PT.'.$company,
+            'laboratory' => 'Laboratorium '.$company,
+            'npwp' => fake()->unique()->randomDigit(6),
             'address' => fake()->address()
         ];
     }

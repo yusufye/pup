@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->after('name');
-            $table->string('laboratory',50)->after('name');
+            $table->string('npwp', 9)->after('laboratory')->unique();
         });
+        
     }
 
     /**
@@ -23,9 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn('client_id');
-            $table->dropColumn('laboratory');
+            $table->dropColumn('npwp');
         });
-        
     }
 };

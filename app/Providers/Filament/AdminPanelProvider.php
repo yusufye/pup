@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
+use App\Models\Client;
 use Filament\PanelProvider;
 use Illuminate\Support\Str;
 use Filament\Support\Colors\Color;
@@ -30,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -61,12 +63,16 @@ class AdminPanelProvider extends PanelProvider
               
                 NavigationItem::make('My Company')
                 ->url(function () {
-                    $userId = auth()->id();
-                    $clientId = DB::table('clients') ->where('user_id', $userId) ->pluck('id') ->first();
-
+                    $check=Client::where('user_id',auth()->id())->get();
+                    
+                    if ($check->isEmpty()) {
+                        $url = "../admin/clients/create";
+                    }else{
                         $url = "../admin/clients/{$clientId}/edit";
-                        $cleanedUrl = Str::of($url)->replace('..', '');
-                        return $cleanedUrl;
+                    }
+
+                    $cleanedUrl = Str::of($url)->replace('..', '');
+                    return $cleanedUrl;
                 })
                 ->icon('heroicon-o-user')
                 ->visible(fn(): bool => auth()->user()->hasRole('Client')),

@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\CommodityResource\Pages;
 
-use App\Filament\Resources\CommodityResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
+use App\Filament\Resources\CommodityResource;
 
 class EditCommodity extends EditRecord
 {
@@ -15,5 +16,10 @@ class EditCommodity extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    public function getTitle(): string | Htmlable
+    {
+        return __('Komoditas');
     }
 }
