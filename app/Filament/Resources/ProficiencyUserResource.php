@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProficiencyUserResource\Pages;
 use App\Filament\Resources\ProficiencyUserResource\RelationManagers;
 use App\Filament\Resources\ProficiencyUserResource\RelationManagers\ProficiencyUserCommodityRelationManager;
+use App\Filament\Resources\ProficiencyUserResource\RelationManagers\ProficiencyUserQuestionnaireRelationManager;
 use App\Models\Client;
 use App\Models\Commodity;
 use App\Models\CommodityPackage;
@@ -115,9 +116,22 @@ class ProficiencyUserResource extends Resource
                             'xl' => 1,
                         ])
                         ->label('Client'),
+                        Select::make('status')
+                        ->options([
+                            "ACTIVE" => "ACTIVE",
+                            "REJECT" => "REJECT"
+                        ])
+                        ->dehydrated()
+                        ->visible(auth()->user()->hasRole('super_admin'))
+                        ->columnSpan([
+                            'sm' => 2,
+                            'xl' => 1,
+                        ])
+                        ->label('Status'),
                         
                         FileUpload::make('client_report')
                         ->maxSize(2048)
+                        ->acceptedFileTypes(['application/pdf', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'])
                         ->hiddenOn('create')
                         ->visible(auth()->user()->hasRole('super_admin'))
                         ->label('Document')
@@ -129,6 +143,7 @@ class ProficiencyUserResource extends Resource
                         ]),
                         FileUpload::make('client_sertificate')
                         ->maxSize(2048)
+                        ->acceptedFileTypes(['application/pdf', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'])
                         ->hiddenOn('create')
                         ->visible(auth()->user()->hasRole('super_admin'))
                         ->directory('proficiency_user/client_sertificate/')
@@ -190,6 +205,7 @@ class ProficiencyUserResource extends Resource
                         
                     ->visibleOn('edit')
                     ->schema([
+                        
                         Toggle::make('is_kuisoner')
                         ->live(onBlur:true)
                         ->afterStateUpdated(function (Get $get, Set $set) {
@@ -250,6 +266,10 @@ class ProficiencyUserResource extends Resource
         return $table
             ->columns([
                TextColumn::make('Proficiency.years')
+               ->label('Tahun')
+               ->searchable(),
+               TextColumn::make('Clients.name')
+               ->label('Client')
                ->searchable(),
                ViewColumn::make('client_report')
                ->label('Client Report')
@@ -277,6 +297,7 @@ class ProficiencyUserResource extends Resource
                         return true;
                     }
                 }),
+                Tables\Actions\ViewAction::make(),
                 
             ])
             ->bulkActions([
@@ -291,6 +312,7 @@ class ProficiencyUserResource extends Resource
     {
         return [
             ProficiencyUserCommodityRelationManager::class,
+            ProficiencyUserQuestionnaireRelationManager::class,
         ];
     }
 
@@ -300,6 +322,7 @@ class ProficiencyUserResource extends Resource
             'index' => Pages\ListProficiencyUsers::route('/'),
             'create' => Pages\CreateProficiencyUser::route('/create'),
             'edit' => Pages\EditProficiencyUser::route('/{record}/edit'),
+            'view' => Pages\ViewProficiencyUser::route('/{record}'),
         ];
     }
 

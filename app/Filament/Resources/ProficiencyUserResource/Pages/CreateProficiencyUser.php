@@ -16,6 +16,12 @@ class CreateProficiencyUser extends CreateRecord
 {
     protected static string $resource = ProficiencyUserResource::class;
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['status'] = 'ACTIVE';
+        return $data;
+    }
+
 //     protected function handleRecordCreation(array $data): Model
 // {
 //     $fillableAttributes = [

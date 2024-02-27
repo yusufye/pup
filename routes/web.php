@@ -20,4 +20,5 @@ Route::get('/', function () {
 Route::controller(ProficiencyUserController::class)->group(function () {
     Route::get('download_client_report/{record}',  'download_client_report')->name('download.client.report');
     Route::get('download_client_certificate/{record}',  'download_client_certificate')->name('download.client.certificate');
+    Route::get('download_client_document/{record}',  'download_client_document')->name('download.client.document');
 });
