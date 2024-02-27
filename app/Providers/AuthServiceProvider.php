@@ -4,7 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
+use App\Models\User;
+use Filament\Actions\Exports\Models\Export;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -23,4 +24,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         //
     }
+
+    
+ 
+public function view(User $user, Export $export): bool
+{
+    return $export->user()->is($user);
+}
 }

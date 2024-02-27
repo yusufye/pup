@@ -75,6 +75,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
-            ]);
+            ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling(interval:'2s');
     }
 }
