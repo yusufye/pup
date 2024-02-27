@@ -19,6 +19,8 @@ class CommodityPackageResource extends Resource
 {
     protected static ?string $model = CommodityPackage::class;
     protected static bool $shouldRegisterNavigation = false;
+    protected static ?string $modelLabel = 'Paket';
+
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

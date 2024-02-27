@@ -21,6 +21,7 @@ use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -63,6 +64,7 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                         ->searchable(),
                         FileUpload::make('client_document')
                         ->maxSize(2048)
+                        ->acceptedFileTypes(['application/pdf', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'])
                         ->hiddenOn('create')
                         ->visible(auth()->user()->hasRole('client'))
                         ->label('Document')
@@ -75,7 +77,7 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                         ]),
                         Hidden::make('commodity_id')->visibleOn('edit'),
                         Section::make()
-                        ->visibleOn('edit')
+                        ->hiddenOn('create')
                         ->schema([                            
                         Repeater::make('proficienty_items')                         
                             ->relationship('ProficiencyUserPackage')
@@ -142,7 +144,7 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
                                     'sm' => 6,
                                     'xl' => 6,
                                 ])
-                                ->visibleOn('edit')
+                                ->hiddenOn('create')
                                 ->searchable(),
                                 TextInput::make('package_price')
                                 ->placeholder(function(Get $get, Set $set){ 
@@ -180,7 +182,8 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
             // ->recordTitleAttribute('proficiency_user_id')
             ->columns([
                 TextColumn::make('Commodity.name'),
-                TextColumn::make('Commodity.client_document')
+                ViewColumn::make('client_document')
+                ->view('tables.columns.client-document')
                 ->label('Document'),
 
             ])
@@ -193,6 +196,7 @@ class ProficiencyUserCommodityRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
